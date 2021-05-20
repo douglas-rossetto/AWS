@@ -1,0 +1,16 @@
+---
+  - name: Test IAM
+    hosts: local
+    connection: local
+
+    tasks:
+      - name: Create new IAM Users
+        iam:
+          iam_type: user
+          name: "{{ item }}"
+          state: present
+          password: MeMudar123456!
+          groups: DBA
+        with_items:
+          - jcleese.teste2
+          - mpython.teste3

@@ -1,0 +1,30 @@
+---
+  - name: Create AWS IAM Users from a CSV List File
+    hosts: local
+    connection: local
+
+    tasks:
+
+     - name: Read users from CSV file and return a list
+       read_csv:
+         path: usuarios4.csv
+       delegate_to: localhost
+       register: users
+
+     - name: display user_list data
+       debug:
+         msg: "{{ users.list }}"
+
+     - name: print dictionaries
+       debug:
+         msg: "{{ item.usuarios }}"
+       loop: "{{ users.list }}"
+
+     - name: Create new IAM Users
+       iam:
+        iam_type: user
+        name: "{{ item.usuarios }}"
+        state: present
+        password: "{{ item.senha }}"
+        groups: "{{ item.grupo }}"
+       loop: "{{ users.list }}"

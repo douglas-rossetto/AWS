@@ -1,0 +1,30 @@
+---
+  - name: Test IAM
+    hosts: local
+    connection: local
+
+    tasks:
+
+     - name: Read users from CSV file and return a list
+       community.general.read_csv:
+         path: usuarios4.csv
+       register: users
+       delegate_to: localhost
+
+     - name: Create new IAM Users
+       iam:
+        iam_type: user
+        name: "{{ item }}"
+        state: present
+        password: MeMudar123456!
+        groups: DBA
+       with_items:
+        - "{{ users.list.0.usuarios }}"
+        - "{{ users.list.1.usuarios }}"
+        - "{{ users.list.2.usuarios }}"
+        - "{{ users.list.3.usuarios }}"
+        - "{{ users.list.4.usuarios }}"
+        - "{{ users.list.5.usuarios }}"
+        - "{{ users.list.6.usuarios }}"
+        - "{{ users.list.7.usuarios }}"
+        - "{{ users.list.8.usuarios }}"
